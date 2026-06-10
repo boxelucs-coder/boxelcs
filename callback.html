@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BoxelCS — Login Complete</title>
+<style>
+  body { background:#0f1115; color:#e8e8e8; font-family:system-ui,Segoe UI,Arial;
+         max-width:720px; margin:0 auto; padding:48px 24px; line-height:1.6; }
+  h1 { font-size:24px; }
+  code { display:block; background:#181b22; border:1px solid #2a2e38;
+         border-radius:8px; padding:14px; word-break:break-all; margin:16px 0;
+         font-size:14px; }
+  button { background:#1f7a3d; color:#fff; border:0; border-radius:8px;
+           padding:12px 24px; font-size:15px; font-weight:600; cursor:pointer; }
+  .muted { color:#9aa; } .err { color:#e08080; }
+</style>
+</head>
+<body>
+<h1>TikTok login complete</h1>
+<div id="out"></div>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get("code");
+  const error = params.get("error");
+  const out = document.getElementById("out");
+  if (code) {
+    out.innerHTML = `
+      <p>Copy this code and paste it into your terminal:</p>
+      <code id="code">${code.replace(/[<>&]/g, "")}</code>
+      <button onclick="navigator.clipboard.writeText(document.getElementById('code').textContent).then(()=>{this.textContent='Copied!'})">Copy code</button>
+      <p class="muted">You can close this tab after pasting.</p>`;
+  } else if (error) {
+    out.innerHTML = `<p class="err">Login failed: ${error.replace(/[<>&]/g, "")}.
+      Close this tab and run the script again.</p>`;
+  } else {
+    out.innerHTML = `<p class="muted">No authorization code found in the URL.
+      This page is the OAuth callback for the BoxelCS desktop app.</p>`;
+  }
+</script>
+</body>
+</html>
